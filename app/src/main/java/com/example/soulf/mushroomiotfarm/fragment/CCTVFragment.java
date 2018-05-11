@@ -94,7 +94,7 @@ public class CCTVFragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        })
+        });
 
     }
 

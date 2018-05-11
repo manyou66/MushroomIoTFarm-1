@@ -19,100 +19,36 @@ import com.example.soulf.mushroomiotfarm.R;
 import com.google.firebase.auth.FirebaseAuth;
 
 /**
- * Created by soulf on 3/2/2018.
+ * Created by bow on 11/5/2561.
  */
 
-public class ManualFragment extends Fragment {
+public class GraphAutoFragment extends Fragment {
 
     private String urlField1 = "https://thingspeak.com/channels/437884/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15";
     private String urlField2 = "https://thingspeak.com/channels/437884/charts/2?average=10&bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&title=Light&type=line";
     private String urlField3 = "https://thingspeak.com/channels/437884/charts/3?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15";
     private String urlField4 = "https://thingspeak.com/channels/437884/charts/4?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15";
     private String urlField5 = "https://thingspeak.com/channels/437884/charts/5?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15";
-
+    
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
-        setHasOptionsMenu(true);
+
         //Create Toolbar
         createToolbar();
         // Create WebView
         createWebView();
-    } //Main Method
+        
+        
+    }//Main Method
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_manual, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        //SignOut
-        if (item.getItemId()==R.id.itemSignOut) {
-            mySignOut();
-        }
-
-//        Light
-        if (item.getItemId() == R.id.itemLight) {
-//            Do it
-            getActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.contentMainFragment, new LightFragment())
-                    .addToBackStack(null)
-                    .commit();
-            return true;
-        }
-//        Fan
-        if (item.getItemId() == R.id.itemFan) {
-//            Do it
-            getActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.contentMainFragment, new FanFragment())
-                    .addToBackStack(null)
-                    .commit();
-            return true;
-        }
-//        Cloud
-        if (item.getItemId() == R.id.itemCloud) {
-//            Do it
-            getActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.contentMainFragment, new CloudFragment())
-                    .addToBackStack(null)
-                    .commit();
-            return true;
-        }
-//        CCTV
-        if (item.getItemId() == R.id.itemCCTV) {
-//            Do it
-            getActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.contentMainFragment, new CCTVFragment())
-                    .addToBackStack(null)
-                    .commit();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void mySignOut() {
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        firebaseAuth.signOut();
-
-//        Return to AutoFragment
-        getActivity()
-                .getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.contentMainFragment, new AuthenFragment())
-                .commit();
-    }
 
     private void createWebView() {
+
         WebView field1WebView = getView().findViewById(R.id.webViewTemp);
         WebView field2WebView = getView().findViewById(R.id.webViewFan);
         WebView field3WebView = getView().findViewById(R.id.webViewlight);
@@ -144,26 +80,61 @@ public class ManualFragment extends Fragment {
         field5WebView.setWebViewClient(field5WebViewClient);
         field1WebView.loadUrl(urlField5);
         field1WebView.getSettings().setJavaScriptEnabled(true);
+
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_graph,menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        //        Sign Out
+        if (item.getItemId()==R.id.itemSignOut) {
+            mySignOut();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void mySignOut() {
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth.signOut();
+
+//        Return to AutoFragment
+        getActivity()
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.contentMainFragment, new AuthenFragment())
+                .commit();
+
     }
 
     private void createToolbar() {
         Toolbar toolbar = getView().findViewById(R.id.toolbarManual);
+
         ((MainActivity)getActivity()).setSupportActionBar(toolbar);
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Manual");
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.temp_th));
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.update_th));
         ((MainActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });
+        setHasOptionsMenu(true);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_manual, container, false);
+
         return view;
     }
 }
